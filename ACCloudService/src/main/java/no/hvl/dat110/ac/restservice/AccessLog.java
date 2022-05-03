@@ -4,6 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 
 public class AccessLog {
 	
@@ -19,7 +20,9 @@ public class AccessLog {
 	// TODO: add an access entry to the log for the provided message and return assigned id
 	public int add(String message) {
 		
-		int id = 0;
+		int id = cid.incrementAndGet();
+		AccessEntry ae = new AccessEntry(id, message);
+		log.put(id, ae);
 		
 		return id;
 	}
@@ -27,19 +30,21 @@ public class AccessLog {
 	// TODO: retrieve a specific access entry from the log
 	public AccessEntry get(int id) {
 		
-		return null;
+		return log.get(id);
 		
 	}
 	
 	// TODO: clear the access entry log
 	public void clear() {
+		log.clear();
 		
 	}
 	
 	// TODO: return JSON representation of the access log
 	public String toJson () {
+    	Gson gson = new Gson();
     	
-		String json = null;
+		String json = gson.toJson(this);
     	
     	return json;
     }
